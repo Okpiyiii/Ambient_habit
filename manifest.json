@@ -1,0 +1,27 @@
+{
+    "name": "Ambient Habit — Study Pomodoro & Clock",
+    "short_name": "Ambient Habit",
+    "description": "The minimalist Ambient study dashboard with a study pomodoro, study clock, study timer, and live Lofi.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1a1a2e",
+    "theme_color": "#E8734A",
+    "orientation": "any",
+    "categories": ["productivity", "education", "utilities"],
+    "icons": [
+        {
+            "src": "icon/app_icon.png",
+            "sizes": "1024x1024",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "wallpapers/sunset-bg.png?v=2",
+            "sizes": "1920x1080",
+            "type": "image/png",
+            "label": "Ambient Habit — Sunset Theme"
+        }
+    ]
+}
