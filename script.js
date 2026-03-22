@@ -184,6 +184,7 @@ const panels = {
     pomodoro: document.getElementById('pomodoro-panel'),
     stopwatch: document.getElementById('stopwatch-panel'),
     music: document.getElementById('music-panel'),
+    mindful: document.getElementById('mindful-panel'),
 };
 
 function closeAllPanels() {
@@ -210,6 +211,7 @@ function togglePanel(name) {
 document.getElementById('btn-pomodoro').addEventListener('click', () => togglePanel('pomodoro'));
 document.getElementById('btn-stopwatch').addEventListener('click', () => togglePanel('stopwatch'));
 document.getElementById('btn-music').addEventListener('click', () => togglePanel('music'));
+document.getElementById('btn-mindful').addEventListener('click', () => togglePanel('mindful'));
 
 /* --- Close panels on tap outside (mobile fix) --- */
 document.addEventListener('click', (e) => {
@@ -1058,5 +1060,123 @@ habitBtnSave.addEventListener('click', () => {
     habitViewChoose.classList.add('hidden');
     habitViewMain.classList.remove('hidden');
     selectedNewHabitId = null;
+});
+
+/* =============================================================
+   MINDFULNESS APP
+   ============================================================= */
+const mindfulPrompt = document.getElementById('mindful-prompt');
+const mindfulPlayBtn = document.getElementById('mindful-start');
+const mindfulOrbits = document.getElementById('mindful-orbits');
+const mindfulTimeDisplay = document.getElementById('mindful-time');
+const mindfulToggleBtns = document.querySelectorAll('.mindful-toggle-btn');
+const mindfulCloseBtn = document.getElementById('mindful-close');
+
+let mindfulMode = 'mindful'; // 'mindful' or 'focus'
+let mindfulPlaying = false;
+let mindfulTimer = POMO_FOCUS || 25 * 60;
+let mindfulInterval = null;
+
+const M_PLAY_SVG = '<polygon points="8 5 19 12 8 19"/>';
+const M_PAUSE_SVG = '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+
+const prompts = [
+    "Relax your jaw and drop your shoulders.",
+    "Breathe in deeply...",
+    "Hold it...",
+    "And exhale slowly...",
+    "Let go of your thoughts.",
+    "BE PRESENT."
+];
+let promptIdx = 0;
+let promptInterval = null;
+
+function formatMindfulTime(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function stopMindful() {
+    mindfulPlaying = false;
+    mindfulPlayBtn.querySelector('svg').innerHTML = M_PLAY_SVG;
+    mindfulOrbits.classList.remove('playing');
+    clearInterval(mindfulInterval);
+    clearInterval(promptInterval);
+    mindfulPrompt.textContent = mindfulMode === 'mindful' ? "BE PRESENT." : "Ready to focus.";
+    mindfulPrompt.style.opacity = 1;
+}
+
+function startMindful() {
+    mindfulPlaying = true;
+    mindfulPlayBtn.querySelector('svg').innerHTML = M_PAUSE_SVG;
+    
+    if (mindfulMode === 'mindful') {
+        mindfulOrbits.classList.add('playing');
+        promptIdx = 0;
+        mindfulPrompt.style.opacity = 0;
+        setTimeout(() => {
+            mindfulPrompt.textContent = prompts[promptIdx];
+            mindfulPrompt.style.opacity = 1;
+        }, 500);
+        promptInterval = setInterval(() => {
+            mindfulPrompt.style.opacity = 0;
+            setTimeout(() => {
+                promptIdx = (promptIdx + 1) % prompts.length;
+                mindfulPrompt.textContent = prompts[promptIdx];
+                mindfulPrompt.style.opacity = 1;
+            }, 500);
+        }, 4000);
+    } else {
+        // Focus mode timer
+        mindfulPrompt.textContent = "Focusing...";
+        mindfulInterval = setInterval(() => {
+            if (mindfulTimer > 0) {
+                mindfulTimer--;
+                mindfulTimeDisplay.textContent = formatMindfulTime(mindfulTimer);
+            } else {
+                stopMindful();
+                mindfulPrompt.textContent = "Session Complete";
+            }
+        }, 1000);
+    }
+}
+
+mindfulPlayBtn.addEventListener('click', () => {
+    if (mindfulPlaying) {
+        stopMindful();
+    } else {
+        startMindful();
+    }
+});
+
+mindfulToggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (mindfulPlaying) stopMindful();
+        
+        mindfulToggleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        mindfulMode = btn.dataset.mode;
+        
+        if (mindfulMode === 'mindful') {
+            mindfulOrbits.style.display = 'block';
+            setTimeout(() => mindfulOrbits.style.opacity = 1, 50);
+            mindfulTimeDisplay.style.display = 'none';
+            mindfulPrompt.textContent = "BE PRESENT.";
+        } else {
+            mindfulOrbits.style.opacity = 0;
+            setTimeout(() => mindfulOrbits.style.display = 'none', 500);
+            mindfulTimeDisplay.style.display = 'block';
+            mindfulTimer = POMO_FOCUS || 25 * 60;
+            mindfulTimeDisplay.textContent = formatMindfulTime(mindfulTimer);
+            mindfulPrompt.textContent = "Ready to focus.";
+        }
+    });
+});
+
+mindfulCloseBtn.addEventListener('click', () => {
+    if (mindfulPlaying) stopMindful();
+    togglePanel('mindful');
 });
 

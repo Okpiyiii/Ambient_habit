@@ -2275,3 +2275,261 @@ body[data-theme="night"] .bg-night {
     opacity: 0.3;
     pointer-events: none;
 }
+
+/* =============================================================
+   MINDFUL PANEL
+   ============================================================= */
+.mindful-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 280px;
+    min-height: 480px;
+    padding: 1.5rem;
+}
+
+.mindful-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.mindful-close-icon {
+    position: absolute;
+    left: 0;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.2rem;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mindful-close-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.mindful-close-icon:hover {
+    color: var(--text-primary);
+}
+
+.mindful-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.mindful-display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.mindful-ring-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.mindful-ring-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.mindful-orbits {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.mindful-orbits.active {
+    display: block;
+    opacity: 1;
+}
+
+.orbit-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.orbit-planet {
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.inner-planet {
+    width: 8px;
+    height: 8px;
+    top: 50%;
+    left: 50%;
+    margin-top: -4px;
+    margin-left: -4px;
+    transform: translate(45px, 0); /* r=45 */
+}
+
+.outer-planet {
+    width: 6px;
+    height: 6px;
+    top: 50%;
+    left: 50%;
+    margin-top: -3px;
+    margin-left: -3px;
+    transform: translate(70px, 0); /* r=70 */
+}
+
+.mindful-orbits.playing .inner-planet {
+    animation: orbit-spin 5s linear infinite;
+}
+
+.mindful-orbits.playing .outer-planet {
+    animation: orbit-spin 10s linear infinite reverse;
+}
+
+@keyframes orbit-spin {
+    from { transform: rotate(0deg) translate(var(--r, 45px)) rotate(0deg); }
+    to { transform: rotate(360deg) translate(var(--r, 45px)) rotate(-360deg); }
+}
+.inner-planet { --r: 45px; }
+.outer-planet { --r: 70px; }
+
+.mindful-time {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+    letter-spacing: 0.05em;
+}
+
+.mindful-time.hidden {
+    display: none;
+}
+
+.mindful-prompt {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 2rem;
+    min-height: 1rem;
+    transition: opacity 0.5s ease;
+}
+
+.mindful-toggles {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(0,0,0,0.2);
+    padding: 0.3rem;
+    border-radius: 2rem;
+    border: 1px solid var(--widget-border);
+}
+
+.mindful-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 1.5rem;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mindful-toggle-btn.active {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary);
+}
+
+.mindful-toggle-btn svg {
+    opacity: 0.7;
+}
+
+.mindful-toggle-btn.active svg {
+    opacity: 1;
+}
+
+.mindful-footer {
+    width: 100%;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.mindful-brand {
+    text-align: center;
+}
+
+.mindful-brand-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+}
+
+.mindful-brand-sub {
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.mindful-play {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid var(--widget-border);
+    background: transparent;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mindful-play:hover {
+    background: rgba(255,255,255,0.05);
+    transform: scale(1.05);
+}
+
+.mindful-play svg {
+    width: 24px;
+    height: 24px;
+    margin-left: 2px;
+}
